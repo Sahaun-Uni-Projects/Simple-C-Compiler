@@ -1,0 +1,127 @@
+===== Tokens =====
+[float] [id 0] [=] [3.125] [;] [int] [id 1] [=] [5] [;] [double] [id 2] [(] [int] [id 3] [)] [{] [double] [id 4] [=] [0.1] [;] [if] [(] [id 3] [<] [id 0] [)] [id 4] [=] [0.01] [;] [else] [if] [(] [id 3] [==] [1] [)] [id 4] [=] [0.001] [;] [else] [return] [id 4] [;] [return] [0] [;] [}] [int] [id 5] [(] [void] [)] [{] [int] [id 6] [;] [double] [id 7] [;] [id 6] [=] [25] [;] [id 7] [=] [id 2] [(] [)] [;] [}] 
+
+
+===== Symbol Table =====
+Id		Name		Id type		Data Type		Scope		Value
+0		x1		var		float			global		3.125
+1		a		var		int			global		5
+2		f1		func		double			global		
+3		x		var		int			f1		
+4		z		var		double			f1		0.001
+5		main		func		int			global		
+6		n1		var		int			main		25
+7		z		var		double			main		
+
+
+
+===== Processed Grammar =====
+<exp> -> <term> + <term>
+<exp> -> <term> - <term>
+<exp> -> <term>
+<term> -> <factor> * <factor>
+<term> -> <factor> / <factor>
+<term> -> <factor>
+<factor> -> ( <exp> )
+<factor> -> $id$
+<factor> -> $num$
+<stat> -> <asgn_stat>
+<stat> -> <dcsn_stat>
+<stat> -> <loop_stat>
+<asgn_stat> -> $id$ = <expn>
+<expn> -> <exp> <extn>
+<extn> -> $relop$ <exp>
+<extn> -> $eps$
+<dcsn_stat> -> if ( <expn> ) { <stat_lst> } <extn1>
+<extn1> -> $eps$
+<extn1> -> else { <stat_lst> }
+<loop_stat> -> while ( <expn> ) { <stat_lst> }
+<loop_stat> -> for ( <asgn_stat> ; <expn> ; <incr_stat> ) { <stat_lst> }
+<incr_stat> -> $id$ ++
+<incr_stat> -> ++ $id$
+<incr_stat> -> $id$ --
+<incr_stat> -> -- $id$
+<incr_stat> -> $id$ = <expn>
+<dclr> -> $type$ <asgn_stat>
+<dclr_lst> -> $eps$
+<dclr_lst> -> <dclr> <dclr_lst>
+<func_lst> -> <func>
+<func_lst> -> <func> <func_lst>
+<id_lst> -> $id$ , <id_lst>
+<id_lst> -> $id$
+<func> -> $type$ $id$ ( ) { <stat_lst> }
+<stat_lst> -> <stat> <stat_lst>
+<stat_lst> -> $eps$
+<program> -> <dclr_lst> <func_lst>
+
+
+
+===== First Sets =====
++ : +
+- : -
+* : *
+/ : /
+( : (
+) : )
+$id$ : $id$
+$num$ : $num$
+= : =
+$relop$ : $relop$
+$eps$ : $eps$
+if : if
+{ : {
+} : }
+else : else
+while : while
+for : for
+; : ;
+++ : ++
+-- : --
+$type$ : $type$
+, : ,
+<exp> : $id$ $num$ (
+<term> : $id$ $num$ (
+<factor> : $id$ $num$ (
+<stat> : $id$ for if while
+<asgn_stat> : $id$
+<expn> : $id$ $num$ (
+<extn> : $eps$ $relop$
+<dcsn_stat> : if
+<extn1> : $eps$ else
+<loop_stat> : for while
+<incr_stat> : $id$ ++ --
+<dclr> : $type$
+<dclr_lst> : $eps$ $type$
+<func_lst> : $type$
+<id_lst> : $id$
+<func> : $type$
+<stat_lst> : $eps$ $id$ for if while
+<program> : $type$
+
+
+===== Follow Sets =====
+<exp> : $ $id$ $relop$ $type$ ) ; for if while }
+<term> : $ $id$ $relop$ $type$ ) + - ; for if while }
+<factor> : $ $id$ $relop$ $type$ ) * + - / ; for if while }
+<stat> : $id$ for if while }
+<asgn_stat> : $id$ $type$ ; for if while }
+<expn> : $id$ $type$ ) ; for if while }
+<extn> : $id$ $type$ ) ; for if while }
+<dcsn_stat> : $id$ for if while }
+<extn1> : $id$ for if while }
+<loop_stat> : $id$ for if while }
+<incr_stat> : )
+<dclr> : $type$
+<dclr_lst> : $type$
+<func_lst> :
+<id_lst> :
+<func> : $type$
+<stat_lst> : }
+<program> :
+
+
+===== CFG Parsing =====
+[float] [id 0] [=] [3.125] 
+Match : <dclr> -> $type$ <asgn_stat>
+[int] [id 1] [=] [5] 
+Match : <dclr> -> $type$ <asgn_stat>

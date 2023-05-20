@@ -1,0 +1,18 @@
+<exp> <term> + <term> | <term> - <term> | <term>
+<term> <factor> * <factor> | <factor> / <factor> | <factor>
+<factor> ( <exp> ) | $id$ | $num$
+<stat> <asgn_stat> | <dcsn_stat> | <loop_stat>
+<asgn_stat> $id$ = <expn>
+<expn> <exp> <extn>
+<extn> $relop$ <exp> | $eps$
+<dcsn_stat> if ( <expn> ) { <stat_lst> } <extn1>
+<extn1> $eps$ | else { <stat_lst> }
+<loop_stat> while ( <expn> ) { <stat_lst> } | for ( <asgn_stat> ; <expn> ; <incr_stat> ) { <stat_lst> }
+<incr_stat> $id$ ++ | ++ $id$ | $id$ -- | -- $id$ | $id$ = <expn>
+<dclr> $type$ <asgn_stat>
+<dclr_lst> $eps$ | <dclr> <dclr_lst>
+<func_lst> <func> | <func> <func_lst>
+<id_lst> $id$ , <id_lst> | $id$
+<func> $type$ $id$ ( ) { <stat_lst> }
+<stat_lst> <stat> <stat_lst> | $eps$
+<program> <dclr_lst> <func_lst>
